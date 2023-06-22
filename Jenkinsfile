@@ -1,5 +1,5 @@
 node {
-    docker.image('node:16-buster-slim').withRun('-p 3000:3000"') {
+    docker.image('node:16-buster-slim').inside {
         stage('Build') {
             sh 'npm install'
         }
