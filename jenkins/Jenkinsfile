@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'node:lts-buster-slim'
+            image 'node:16-buster-slim'
             args '-p 3000:3000'
         }
     }
@@ -19,10 +19,16 @@ pipeline {
                 sh './jenkins/scripts/test.sh'
             }
         }
-        stage('Deliver') {
+        stage('Manual Approval') {
+            steps {
+                input message: 'Lanjutkan ke tahap Deploy?'
+            }
+        }
+        stage('Deploy') {
             steps {
                 sh './jenkins/scripts/deliver.sh'
-                input message: 'Finished using the web site? (Click "Proceed" to continue)'
+                // input message: 'Finished using the web site? (Click "Proceed" to continue)'
+                sh 'sleep 60'
                 sh './jenkins/scripts/kill.sh'
             }
         }
